@@ -183,7 +183,6 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Группа успешно создана");
-                        WeakReferenceMessenger.Default.Send(new ReloadChatsMessage());
                     }
                 }
                 else
@@ -239,13 +238,12 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Изменения успешно сохранены");
-                        WeakReferenceMessenger.Default.Send(new ReloadChatsMessage());
                     }
                 }
                 else
                 {
                     var error = await response.Content.ReadAsStringAsync();
-                    Growl.Error($"Ошибка сервера: {error}");
+                    Growl.Error($"{error}");
                 }
             }
             catch (Exception ex)

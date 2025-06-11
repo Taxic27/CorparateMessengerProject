@@ -158,7 +158,7 @@ BorderThickness="0"
 hc:BackgroundSwitchElement.MouseHoverBackground="#3E4047"
 hc:BackgroundSwitchElement.MouseDownBackground="#3E4047"
                     Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            <Button Command="{Binding EditGroupCommand}" 
+            <Button Command="{Binding CreateGroupCommand}" 
         Content="Создать группу"
                 Grid.Row="2"
         HorizontalAlignment="Right"

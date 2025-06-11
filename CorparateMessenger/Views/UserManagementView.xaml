@@ -4,9 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CorparateMessenger.Views"
-                     xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:conv="clr-namespace:CorparateMessenger.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -14,10 +19,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!-- Аватар пользователя -->
         <Border Background="#3E4047"
-          Width="120" 
-            Height="120"
-            CornerRadius="100">
+                Width="120" 
+                Height="120"
+                CornerRadius="100" Margin="140,165,140,165">
             <Border.Style>
                 <Style TargetType="Border">
                     <Setter Property="Opacity" Value="1"/>
@@ -39,107 +45,139 @@
             </Border.InputBindings>
         </Border>
 
+        <!-- Форма данных пользователя -->
         <StackPanel Grid.Column="2" 
                     Margin="20,0,20,0"
                     VerticalAlignment="Center">
+            <!-- Логин -->
             <TextBlock Text="Логин:" 
                        Margin="0,3"
                        FontWeight="SemiBold"
-Foreground="#FFFFFF"
-VerticalAlignment="Center"
-FontSize="16"/>
-            <TextBox
+                       Foreground="#FFFFFF"
+                       VerticalAlignment="Center"
+                       FontSize="16"
+                       Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      BorderThickness="0"
-            Background="#3e4147" 
-Foreground="#bdbdbd"
-CaretBrush="Gray"
-                hc:InfoElement.Placeholder="Введите имя"
-Style="{StaticResource TextBoxExtend}"/>
+                     Background="#3e4147" 
+                     Foreground="#bdbdbd"
+                     CaretBrush="Gray"
+                     hc:InfoElement.Placeholder="Введите логин"
+                     Style="{StaticResource TextBoxExtend}"
+                     Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- Пароль -->
             <TextBlock Text="Пароль:" 
                        Margin="0,3"
                        FontWeight="SemiBold"
-Foreground="#FFFFFF"
-VerticalAlignment="Center"
-FontSize="16"/>
-            <PasswordBox
+                       Foreground="#FFFFFF"
+                       VerticalAlignment="Center"
+                       FontSize="16"
+                       Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <PasswordBox x:Name="PasswordBox"
                      Height="30"
                      BorderThickness="0"
-            Background="#3e4147" 
-Foreground="#bdbdbd"
-CaretBrush="Gray"/>
+                     Background="#3e4147" 
+                     Foreground="#bdbdbd"
+                     CaretBrush="Gray"
+                     hc:InfoElement.Placeholder="Введите пароль"
+                         PasswordChanged="PasswordBox_PasswordChanged"
+                         Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}">
+            </PasswordBox>
+
+            <!-- Имя -->
             <TextBlock Text="Имя:" 
                        Margin="0,3"
                        FontWeight="SemiBold"
-Foreground="#FFFFFF"
-VerticalAlignment="Center"
-FontSize="16"/>
-            <TextBox
+                       Foreground="#FFFFFF"
+                       VerticalAlignment="Center"
+                       FontSize="16"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      BorderThickness="0"
-            Background="#3e4147" 
-Foreground="#bdbdbd"
-CaretBrush="Gray"
-hc:InfoElement.Placeholder="Введите имя"
-Style="{StaticResource TextBoxExtend}"/>
+                     Background="#3e4147" 
+                     Foreground="#bdbdbd"
+                     CaretBrush="Gray"
+                     hc:InfoElement.Placeholder="Введите имя"
+                     Style="{StaticResource TextBoxExtend}"/>
 
+            <!-- Фамилия -->
             <TextBlock Text="Фамилия:" 
                        Margin="0,5"
-                                              FontWeight="SemiBold"
-Foreground="#FFFFFF"
-VerticalAlignment="Center"
-FontSize="16"/>
-            <TextBox
+                       FontWeight="SemiBold"
+                       Foreground="#FFFFFF"
+                       VerticalAlignment="Center"
+                       FontSize="16"/>
+            <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
-                                          BorderThickness="0"
-            Background="#3e4147" 
-Foreground="#bdbdbd"
-CaretBrush="Gray"
-hc:InfoElement.Placeholder="Введите фамилию"
-Style="{StaticResource TextBoxExtend}"/>
+                     BorderThickness="0"
+                     Background="#3e4147" 
+                     Foreground="#bdbdbd"
+                     CaretBrush="Gray"
+                     hc:InfoElement.Placeholder="Введите фамилию"
+                     Style="{StaticResource TextBoxExtend}"/>
 
+            <!-- Отчество -->
             <TextBlock Text="Отчество:" 
                        Margin="0,5"
                        FontWeight="SemiBold"
-Foreground="#FFFFFF"
-VerticalAlignment="Center"
-FontSize="16"/>
-            <TextBox
+                       Foreground="#FFFFFF"
+                       VerticalAlignment="Center"
+                       FontSize="16"/>
+            <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
-                                          BorderThickness="0"
-            Background="#3e4147" 
-Foreground="#bdbdbd"
-CaretBrush="Gray"
-hc:InfoElement.Placeholder="Введите отчество"
-Style="{StaticResource TextBoxExtend}"/>
+                     BorderThickness="0"
+                     Background="#3e4147" 
+                     Foreground="#bdbdbd"
+                     CaretBrush="Gray"
+                     hc:InfoElement.Placeholder="Введите отчество"
+                     Style="{StaticResource TextBoxExtend}"/>
 
+            <!-- Должность -->
             <TextBlock Text="Должность:" 
                        Margin="0,5"
                        FontWeight="SemiBold"
-Foreground="#FFFFFF"
-VerticalAlignment="Center"
-FontSize="16"/>
-            <TextBox
+                       Foreground="#FFFFFF"
+                       VerticalAlignment="Center"
+                       FontSize="16"/>
+            <TextBox Text="{Binding CurrentPosition, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
-                                          BorderThickness="0"
-            Background="#3e4147" 
-Foreground="#bdbdbd"
-CaretBrush="Gray"
-hc:InfoElement.Placeholder="Введите должность"
-Style="{StaticResource TextBoxExtend}"/>
+                     BorderThickness="0"
+                     Background="#3e4147" 
+                     Foreground="#bdbdbd"
+                     CaretBrush="Gray"
+                     Margin="0,0,0,10"
+                     hc:InfoElement.Placeholder="Введите должность"
+                     Style="{StaticResource TextBoxExtend}"/>
 
-            <Button
-        Content="Добавить пользователя" 
+            <!-- Кнопка сохранения -->
+            <Button Content="Создать пользователя"
+                    Command="{Binding CreateUserCommand}"
+                    HorizontalAlignment="Center"
+                    Width="200"
+                    Margin="0,10,0,10"
+                    Height="35"
+                    FontSize="14"
+                    Background="#3e4147"
+                    Foreground="#bdbdbd"
+                    BorderThickness="0"
+                    hc:BackgroundSwitchElement.MouseHoverBackground="#3E4047"
+                    hc:BackgroundSwitchElement.MouseDownBackground="#3E4047"
+                    Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <Button Content="Редактировать"
+        Command="{Binding EditUserCommand}"
         HorizontalAlignment="Center"
         Width="200"
-                                       Margin="0,20"
+        Margin="0,0"
         Height="35"
         FontSize="14"
         Background="#3e4147"
         Foreground="#bdbdbd"
         BorderThickness="0"
         hc:BackgroundSwitchElement.MouseHoverBackground="#3E4047"
-        hc:BackgroundSwitchElement.MouseDownBackground="#3E4047"/>
+        hc:BackgroundSwitchElement.MouseDownBackground="#3E4047"
+        Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </StackPanel>
     </Grid>
 </UserControl>

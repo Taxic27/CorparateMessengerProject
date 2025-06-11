@@ -15,33 +15,42 @@ namespace Server.Repository
             _mainConnector = mainConnector;
         }
 
-        public void SaveUser(UserBlank.Validated validatedUser)
+        public void CreateUser(UserDB user)
         {
-            string request = @"
-                    INSERT INTO users (id, username, password, createdatetime) 
-                    VALUES (@Id, @Login, @Password, @CreateDateTime)
-                    ON CONFLICT (id) 
-                    DO UPDATE SET
-                    login = EXCLUDED.login,
-                    password = EXCLUDED.password";
+            string request = @"INSERT INTO users (id, username, password, created_at, name, surname, patronymic, avatar, current_position) 
+                    VALUES (@Id, @Login, @Password, @CreateDateTime, @Name, @Surname, @Patronymic, @Avatar, @Current_position)";
 
             var parameters = new DynamicParameters();
-            parameters.Add("@Id", validatedUser.Id);
-            parameters.Add("@Username", validatedUser.Username);
-            parameters.Add("@Password", validatedUser.Password);
-            parameters.Add("@CreateDateTime", DateTime.UtcNow);
+            parameters.Add("@Id", user.Id);
+            parameters.Add("@Login", user.Username);
+            parameters.Add("@Password", user.Password);
+            parameters.Add("@CreateDateTime", user.CreatedAt);
+            parameters.Add("@Name", user.Name);
+            parameters.Add("@Surname", user.Surname);
+            parameters.Add("@Patronymic", user.Patronymic);
+            parameters.Add("@Avatar", user.Avatar);
+            parameters.Add("@Current_position", user.CurrentPosition);
 
             _mainConnector.Execute(request, parameters);
         }
 
-        public UserDB GetUserLogin(string login)
+        public void UpdateUser(UserDB user)
         {
-            string request = @"SELECT * FROM users WHERE username = @Login";
-
+            string request = @"UPDATE users 
+                       SET name = @Name, 
+                           surname = @Surname, 
+                           patronymic = @Patronymic, 
+                           avatar = @Avatar, 
+                           current_position = @Current_position 
+                       WHERE id = @Id";
             var parameters = new DynamicParameters();
-            parameters.Add("@Login", login);
-
-            return _mainConnector.Get<UserDB>(request, parameters);
+            parameters.Add("@Id", user.Id);
+            parameters.Add("@Name", user.Name);
+            parameters.Add("@Surname", user.Surname);
+            parameters.Add("@Patronymic", user.Patronymic);
+            parameters.Add("@Avatar", user.Avatar);
+            parameters.Add("@Current_position", user.CurrentPosition);
+            _mainConnector.Execute(request, parameters);
         }
 
         public UserDB GetUser(string login, string password)
@@ -53,6 +62,7 @@ namespace Server.Repository
                              surname, 
                              patronymic,
                              username,
+                             role,
                              current_position AS CurrentPosition
                              FROM users 
                              WHERE username = @Login AND password = @Password";

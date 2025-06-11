@@ -1,4 +1,5 @@
 ﻿using Server.Models.Chat;
+using Server.Models.User;
 using Server.Tools;
 
 namespace Server.Repository.Interface

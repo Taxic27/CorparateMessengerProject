@@ -7,6 +7,7 @@ using System.Windows.Threading;
 
 namespace CorparateMessenger.Tools
 {
+    // Не работает
     public class SimpleScrollBehavior : Behavior<ListBox>
     {
         private ScrollViewer _scrollViewer;
@@ -34,7 +35,6 @@ namespace CorparateMessenger.Tools
 
         private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            // Запоминаем последнюю позицию только если пользователь не внизу
             if (_scrollViewer.VerticalOffset < _scrollViewer.ScrollableHeight)
             {
                 _lastVisibleItem = GetFirstVisibleItem();

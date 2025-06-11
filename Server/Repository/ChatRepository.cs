@@ -23,6 +23,7 @@ namespace Server.Repository
         c.avatar,
         c.name,
         c.is_group AS IsGroup,
+        c.creator,
         CASE
             WHEN last_msg.file_type IS NOT NULL THEN last_msg.file_type
             ELSE last_msg.text
@@ -129,8 +130,8 @@ WHERE u.id = ANY(@OtherUserIds)";
         public void AddChat(ChatDB chat)
         {
             string request = @"
-            INSERT INTO chats (id, name, is_group, created_at, avatar)
-            VALUES (@Id, @Name, @IsGroup, @CreatedAt, @Avatar)";
+            INSERT INTO chats (id, name, is_group, created_at, avatar, creator)
+            VALUES (@Id, @Name, @IsGroup, @CreatedAt, @Avatar, @Creator)";
 
             var parameters = new DynamicParameters();
             parameters.Add("@Id", chat.Id);
@@ -138,6 +139,7 @@ WHERE u.id = ANY(@OtherUserIds)";
             parameters.Add("@IsGroup", chat.IsGroup);
             parameters.Add("@CreatedAt", chat.CreatedAt);
             parameters.Add("@Avatar", chat.Avatar);
+            parameters.Add("@Creator", chat.Creator);
 
             _mainConnector.Execute(request, parameters);
         }

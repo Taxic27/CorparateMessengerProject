@@ -7,5 +7,6 @@
         public string Name { get; set; }
         public bool IsGroup { get; set; }
         public DateTime CreatedAt { get; set; }
+        public Guid Creator { get; set; }
     }
 }

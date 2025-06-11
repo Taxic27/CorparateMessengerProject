@@ -17,11 +17,75 @@ namespace Server.Services
             _userRepository = userRepository;
         }
 
+        public Result CreateUser(
+            string username,
+            string password,
+                   string name,
+                   string surname,
+                   string? patronymic,
+                   string currentPosition,
+                   byte[]? avatar)
+        {
+            try
+            {
+                var user = new UserDB
+                {
+                    Id = Guid.NewGuid(),
+                    Username = username,
+                    Password = password,
+                    Name = name,
+                    Surname = surname,
+                    Patronymic = patronymic,
+                    CurrentPosition = currentPosition,
+                    Avatar = avatar,
+                    Role = "Сотрудник"
+                };
+
+                _userRepository.CreateUser(user);
+
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail($"Ошибка при создании пользователя: {ex.Message}");
+            }
+        }
+
+        public Result UpdateUser(
+            Guid userid,
+                  string name,
+                  string surname,
+                  string? patronymic,
+                  string currentPosition,
+                  byte[]? avatar)
+        {
+            try
+            {
+                var user = new UserDB
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    Surname = surname,
+                    Patronymic = patronymic,
+                    CurrentPosition = currentPosition,
+                    Avatar = avatar
+                };
+
+                _userRepository.UpdateUser(user);
+
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail($"Ошибка при создании пользователя: {ex.Message}");
+            }
+        }
+
         public Result<UserDB> Login(string? login, string? password)
         {
             if (login.IsNullOrWhiteSpace()) return Result<UserDB>.Fail("Укажите логин");
 
-            if (password.IsNullOrWhiteSpace())  return Result<UserDB>.Fail("Укажите пароль");
+            if (password.IsNullOrWhiteSpace()) return Result<UserDB>.Fail("Укажите пароль");
 
             string passwordHash = HashPassword(password!);
             var user = _userRepository.GetUser(login!, passwordHash!);

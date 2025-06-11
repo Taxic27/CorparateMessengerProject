@@ -15,7 +15,6 @@ namespace CorparateMessenger.Converters
         {
             if (value is DateTime date)
             {
-                // Скрываем если дата равна минимальной или нулевой
                 return date == DateTime.MinValue || date == default(DateTime)
                     ? Visibility.Collapsed
                     : Visibility.Visible;

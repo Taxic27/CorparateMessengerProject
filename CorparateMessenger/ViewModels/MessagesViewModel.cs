@@ -200,7 +200,7 @@ namespace CorparateMessenger.ViewModels
             }
             catch (Exception ex)
             {
-                Growl.WarningGlobal($"Ошибка отправки: {ex.Message}");
+                Growl.WarningGlobal($"{ex.Message}");
             }
         }
 
@@ -228,7 +228,7 @@ namespace CorparateMessenger.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Growl.WarningGlobal($"Ошибка отправки файла: {ex.Message}");
+                    Growl.WarningGlobal($"{ex.Message}");
                 }
             }
         }
@@ -256,12 +256,12 @@ namespace CorparateMessenger.ViewModels
                         message.FileUrl);
 
                     await File.WriteAllBytesAsync(saveDialog.FileName, fileData);
-                    Growl.Success("Скачен");
+                    Growl.Success("Файл скачен");
                 }
             }
             catch (Exception ex)
             {
-                Growl.WarningGlobal($"Ошибка скачивания: {ex.Message}");
+                Growl.WarningGlobal($"{ex.Message}");
             }
         }
 
@@ -301,7 +301,7 @@ namespace CorparateMessenger.ViewModels
             }
             catch (Exception ex)
             {
-                Growl.WarningGlobal($"Не удалось открыть изображение: {ex.Message}");
+                Growl.WarningGlobal($"{ex.Message}");
             }
         }
 

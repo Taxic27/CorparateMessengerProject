@@ -6,6 +6,7 @@
         public byte[] Avatar { get; set; }
         public string Name { get; set; }
         public bool IsGroup { get; set; }
+        public Guid Creator { get; set; }
         public string? LastMessageText { get; set; }
         public DateTime LastMessageSentAt { get; set; }
     }

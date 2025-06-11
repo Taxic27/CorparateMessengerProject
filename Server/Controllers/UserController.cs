@@ -33,6 +33,56 @@ namespace Server.Controllers
             return Result<UserDB>.Success(result.Data!);
         }
 
+        public record CreateUserRequest(
+            string Username,
+            string Password,
+           string Name,
+           string Surname,
+           string? Patronymic,
+           string CurrentPosition,
+           byte[]? Avatar);
+
+        [HttpPost("create")]
+        public Result CreateUser([FromBody] CreateUserRequest request)
+        {
+            var result = _userService.CreateUser(
+                request.Username,
+                request.Password,
+                request.Name,
+                request.Surname,
+                request.Patronymic,
+                request.CurrentPosition,
+                request.Avatar);
+
+            return result.IsSuccess
+                ? Result.Success()
+                : Result.Fail(result.ErrorsAsString);
+        }
+
+        public record UpdateUserRequest(
+            Guid UserId,
+           string Name,
+           string Surname,
+           string? Patronymic,
+           string CurrentPosition,
+           byte[]? Avatar);
+
+        [HttpPut("update")]
+        public Result UpdateUser([FromBody] UpdateUserRequest request)
+        {
+            var result = _userService.UpdateUser(
+                request.UserId,
+                request.Name,
+                request.Surname,
+                request.Patronymic,
+                request.CurrentPosition,
+                request.Avatar);
+
+            return result.IsSuccess
+                ? Result.Success()
+                : Result.Fail(result.ErrorsAsString);
+        }
+
         [HttpGet("id")]
         public Result<List<Guid>> GetAllUsersId()
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorparateMessenger.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ namespace CorparateMessenger.Views
         public UserManagementView()
         {
             InitializeComponent();
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            (DataContext as UserManagmentViewModel).Password = (PasswordBox.Password);
         }
     }
 }

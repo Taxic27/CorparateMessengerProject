@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CorparateMessenger.Tools;
 using CorparateMessenger.Views;
+using HandyControl.Controls;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Server.Models.Chat;
@@ -88,11 +89,6 @@ namespace CorparateMessenger.ViewModels
             LoadAvailableChats();
             LoadAvailableUsers();
 
-            WeakReferenceMessenger.Default.Register<ReloadChatsMessage>(this, (recipient, message) =>
-            {
-                LoadAvailableChats();
-                CurrentView = ViewType.Welcome;
-            });
         }
 
         private async void InitializeHubConnection()
@@ -127,7 +123,7 @@ namespace CorparateMessenger.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка подключения: {ex.Message}");
+                Growl.Warning($"Ошибка подключения: {ex.Message}");
             }
         }
 
@@ -156,7 +152,7 @@ namespace CorparateMessenger.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                Growl.Warning($"Ошибка: {ex.Message}");
             }
         }
 
@@ -199,7 +195,7 @@ namespace CorparateMessenger.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                Growl.Warning($"Ошибка: {ex.Message}");
             }
         }
 
@@ -318,7 +314,7 @@ namespace CorparateMessenger.ViewModels
                 if (!createResponse.IsSuccessStatusCode)
                 {
                     var error = await createResponse.Content.ReadAsStringAsync();
-                    throw new Exception($"Ошибка сервера: {error}");
+                    throw new Exception($"{error}");
                 }
 
                 var newChat = await createResponse.Content.ReadFromJsonAsync<ApiResult<ChatDB>>();
@@ -329,7 +325,7 @@ namespace CorparateMessenger.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при создании чата: {ex.Message}");
+                Growl.Warning($"{ex.Message}");
                 return null;
             }
         }
@@ -348,7 +344,17 @@ namespace CorparateMessenger.ViewModels
         [RelayCommand]
         private async Task AddUser()
         {
+            if (_currentUser.Role == "Администратор")
+                return;
+
             UserVM = new UserManagmentViewModel();
+            CurrentView = ViewType.UserManagement;
+        }
+
+        [RelayCommand]
+        private async Task EditUser()
+        {
+            UserVM = new UserManagmentViewModel(_currentUser);
             CurrentView = ViewType.UserManagement;
         }
 
@@ -366,19 +372,17 @@ namespace CorparateMessenger.ViewModels
             if (SelectedChat == null)
                 return;
 
+            if (SelectedChat.Creator != _currentUser.Id)
+            {
+                Growl.Warning("Вы не являетесь создателем группы");
+                return;
+            }
+                
+
 
             GroupVM = new GroupCreateViewModel(SelectedChat, _currentUser.Id);
 
             CurrentView = ViewType.GroupCreate;
         }
-
-        //[RelayCommand]
-        //private void ScrollChanged(ScrollChangedEventArgs e)
-        //{
-        //    if (e.VerticalChange < 0 && e.VerticalOffset <= 10 && !IsLoadingMessages)
-        //    {
-        //        LoadMoreMessagesCommand.Execute(null);
-        //    }
-        //}
     }
 }

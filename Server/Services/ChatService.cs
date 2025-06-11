@@ -67,7 +67,8 @@ namespace Server.Services
                 Name = selectedUser.Name,
                 IsGroup = false,
                 CreatedAt = DateTime.UtcNow,
-                Avatar = null
+                Avatar = null,
+                Creator = Guid.Empty
             };
 
             _chatRepository.AddChat(newChat);
@@ -90,7 +91,8 @@ namespace Server.Services
                     Name = groupName,
                     IsGroup = true,
                     CreatedAt = DateTime.UtcNow,
-                    Avatar = avatar
+                    Avatar = avatar,
+                    Creator = memberIds.LastOrDefault()
                 };
 
                 _chatRepository.AddChat(newChat);

@@ -88,18 +88,17 @@ namespace CorparateMessenger.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Ошибка сервера: " + response.StatusCode;
                     HasError = true;
                 }
             }
             catch (HttpRequestException ex)
             {
-                ErrorMessage = "Ошибка подключения: " + ex.Message;
+                ErrorMessage = ex.Message;
                 HasError = true;
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Неизвестная ошибка: " + ex.Message;
+                ErrorMessage = ex.Message;
                 HasError = true;
             }
             finally

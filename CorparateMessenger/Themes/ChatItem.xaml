@@ -6,13 +6,9 @@
     <conv:DateTimeToVisibilityConverter x:Key="DateTimeVisibilityConverter"/>
     <conv:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter"/>
 
-    <Color x:Key="PrimaryTextColor">#FFFFFF</Color>
-    <Color x:Key="SecondaryTextColor">#B9BBBE</Color>
-    <Color x:Key="GrayTextColor">#808080</Color>
-
-    <SolidColorBrush x:Key="SenderNameBrush" Color="{StaticResource PrimaryTextColor}"/>
-    <SolidColorBrush x:Key="MessageTextBrush" Color="{StaticResource SecondaryTextColor}"/>
-    <SolidColorBrush x:Key="TimeBrush" Color="{StaticResource GrayTextColor}"/>
+    <SolidColorBrush x:Key="SenderNameBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="MessageTextBrush" Color="#B9BBBE"/>
+    <SolidColorBrush x:Key="TimeBrush" Color="#808080"/>
     <SolidColorBrush x:Key="HoverBrush" Color="#3E4047"/>
 
     <Style TargetType="ListViewItem" x:Key="ChatItem">
@@ -30,7 +26,6 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Аватар -->
                             <Border Width="60" Height="60" CornerRadius="30" Background="#3E4047" Margin="0,0,10,0">
                                 <Image Source="{Binding Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"
                                        Stretch="UniformToFill"
@@ -42,7 +37,6 @@
                                 </Image>
                             </Border>
 
-                            <!-- Остальное содержимое -->
                             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,5,0,5">
                                 <Grid>
                                     <TextBlock Text="{Binding Name}"
