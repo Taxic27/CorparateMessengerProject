@@ -1,0 +1,121 @@
+﻿<Window x:Class="CorparateMessenger.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:CorparateMessenger.ViewModels"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        Height="300" Width="400"
+        Background="#36393F"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:LoginViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="#1C1C1C"
+             MouseDown="Border_MouseDown"
+                Grid.Row="0">
+
+            <Grid>
+                <TextBlock Margin="5,0" HorizontalAlignment="Left" Foreground="Gray" Text="Авторизация" Style="{StaticResource TextBlockLarge}"/>
+
+                <StackPanel HorizontalAlignment="Right"
+                         Orientation="Horizontal">
+
+                    <Button  Width="30"
+                         Content="—"
+                          FontSize="15"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Foreground="Gray"
+                         FontWeight="Bold"
+                         Style="{StaticResource ButtonCustom}"
+                         hc:BackgroundSwitchElement.MouseHoverBackground="#6F717273" 
+                         hc:BackgroundSwitchElement.MouseDownBackground="#69696980"
+                         Click="ButtonMinimaze_Click"/>
+                    <Button Width="30"
+                         Content="▢"
+                         FontSize="15"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Foreground="Gray"
+                         FontWeight="Bold"
+                         Style="{StaticResource ButtonCustom}"
+                         hc:BackgroundSwitchElement.MouseHoverBackground="#6F717273" 
+                         hc:BackgroundSwitchElement.MouseDownBackground="#69696980"
+                         Click="WindowStateButton_Click"/>
+                    <Button Width="30"
+                         Content="X"
+                         FontSize="15"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Foreground="Gray"
+                         Style="{StaticResource ButtonCustom}"
+                         hc:BackgroundSwitchElement.MouseHoverBackground="#BF1313" 
+                         hc:BackgroundSwitchElement.MouseDownBackground="PaleVioletRed"
+                         Click="CloseButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <StackPanel VerticalAlignment="Center" Grid.Row="1" Margin="0,30,0,0">
+            <Border CornerRadius="8" 
+            Background="#3e4147" 
+            Margin="10,0,10,20"
+            Padding="1">
+                <TextBox x:Name="LoginBox" 
+                         Height="40"
+                 Padding="5"
+                         FontSize="14"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 Foreground="#bdbdbd"
+                 CaretBrush="Gray"
+                 hc:InfoElement.Placeholder="Введите логин"
+                 Style="{StaticResource TextBoxExtend}"
+                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+            </Border>
+
+            <Border CornerRadius="8" 
+            Background="#3e4147" 
+            Margin="10,0,10,20"
+            Padding="1">
+                <PasswordBox x:Name="PasswordBox"
+             PasswordChanged="PasswordBox_PasswordChanged"
+             Height="40"
+             Padding="5"
+                             FontSize="14"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 Foreground="#bdbdbd"
+                 CaretBrush="Gray"
+             hc:InfoElement.Placeholder="Введите пароль"
+             hc:InfoElement.Necessary="True"
+             Style="{StaticResource PasswordBoxExtend}">
+                </PasswordBox>
+            </Border>
+
+            <Button Command="{Binding LoginCommand}" 
+                    Content="Войти" 
+                    HorizontalAlignment="Center"
+                    Width="100"
+                    Height="35"
+                    FontSize="14"
+                    Background="#3e4147"
+                    Foreground="#bdbdbd"
+                    BorderThickness="0"
+                    hc:BackgroundSwitchElement.MouseHoverBackground="#3E4047"
+                    hc:BackgroundSwitchElement.MouseDownBackground="#3E4047"/>
+
+            <TextBlock Text="{Binding ErrorMessage}" 
+                       Style="{StaticResource TextBlockDefaultDanger}"
+                       Margin="0,10,0,0"
+                       Height="40"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>

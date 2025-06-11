@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Default_Avatar.jpg" />
+    <None Remove="Icons\AddGroupIcon.png" />
+    <None Remove="Icons\AttachFileIcon.png" />
+    <None Remove="Icons\DocumentIcon.png" />
+    <None Remove="Icons\EditGroupIcon.png" />
+    <None Remove="Icons\SendIcon.png" />
+    <None Remove="Icons\UserAddIcon.png" />
+    <None Remove="Icons\UserChangeIcon.png" />
+    <None Remove="Icons\VideoIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Default_Avatar.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\AddGroupIcon.png" />
+    <Resource Include="Icons\AttachFileIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="HandyControl" Version="3.5.1" />
+    <PackageReference Include="HandyControls" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Server\Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\DocumentIcon.png" />
+    <Resource Include="Icons\EditGroupIcon.png" />
+    <Resource Include="Icons\SendIcon.png" />
+    <Resource Include="Icons\UserAddIcon.png" />
+    <Resource Include="Icons\UserChangeIcon.png" />
+    <Resource Include="Icons\VideoIcon.png" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="CorparateMessenger.Views.UserManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CorparateMessenger.Views"
+                     xmlns:hc="https://handyorg.github.io/handycontrol"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Background="#3E4047"
+          Width="120" 
+            Height="120"
+            CornerRadius="100">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Opacity" Value="1"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Image Source="{Binding Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                   Stretch="UniformToFill">
+                <Image.Clip>
+                    <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60"/>
+                </Image.Clip>
+            </Image>
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding SelectAvatarCommand}"/>
+            </Border.InputBindings>
+        </Border>
+
+        <StackPanel Grid.Column="2" 
+                    Margin="20,0,20,0"
+                    VerticalAlignment="Center">
+            <TextBlock Text="Логин:" 
+                       Margin="0,3"
+                       FontWeight="SemiBold"
+Foreground="#FFFFFF"
+VerticalAlignment="Center"
+FontSize="16"/>
+            <TextBox
+                     Height="30"
+                     BorderThickness="0"
+            Background="#3e4147" 
+Foreground="#bdbdbd"
+CaretBrush="Gray"
+                hc:InfoElement.Placeholder="Введите имя"
+Style="{StaticResource TextBoxExtend}"/>
+            <TextBlock Text="Пароль:" 
+                       Margin="0,3"
+                       FontWeight="SemiBold"
+Foreground="#FFFFFF"
+VerticalAlignment="Center"
+FontSize="16"/>
+            <PasswordBox
+                     Height="30"
+                     BorderThickness="0"
+            Background="#3e4147" 
+Foreground="#bdbdbd"
+CaretBrush="Gray"/>
+            <TextBlock Text="Имя:" 
+                       Margin="0,3"
+                       FontWeight="SemiBold"
+Foreground="#FFFFFF"
+VerticalAlignment="Center"
+FontSize="16"/>
+            <TextBox
+                     Height="30"
+                     BorderThickness="0"
+            Background="#3e4147" 
+Foreground="#bdbdbd"
+CaretBrush="Gray"
+hc:InfoElement.Placeholder="Введите имя"
+Style="{StaticResource TextBoxExtend}"/>
+
+            <TextBlock Text="Фамилия:" 
+                       Margin="0,5"
+                                              FontWeight="SemiBold"
+Foreground="#FFFFFF"
+VerticalAlignment="Center"
+FontSize="16"/>
+            <TextBox
+                     Height="30"
+                                          BorderThickness="0"
+            Background="#3e4147" 
+Foreground="#bdbdbd"
+CaretBrush="Gray"
+hc:InfoElement.Placeholder="Введите фамилию"
+Style="{StaticResource TextBoxExtend}"/>
+
+            <TextBlock Text="Отчество:" 
+                       Margin="0,5"
+                       FontWeight="SemiBold"
+Foreground="#FFFFFF"
+VerticalAlignment="Center"
+FontSize="16"/>
+            <TextBox
+                     Height="30"
+                                          BorderThickness="0"
+            Background="#3e4147" 
+Foreground="#bdbdbd"
+CaretBrush="Gray"
+hc:InfoElement.Placeholder="Введите отчество"
+Style="{StaticResource TextBoxExtend}"/>
+
+            <TextBlock Text="Должность:" 
+                       Margin="0,5"
+                       FontWeight="SemiBold"
+Foreground="#FFFFFF"
+VerticalAlignment="Center"
+FontSize="16"/>
+            <TextBox
+                     Height="30"
+                                          BorderThickness="0"
+            Background="#3e4147" 
+Foreground="#bdbdbd"
+CaretBrush="Gray"
+hc:InfoElement.Placeholder="Введите должность"
+Style="{StaticResource TextBoxExtend}"/>
+
+            <Button
+        Content="Добавить пользователя" 
+        HorizontalAlignment="Center"
+        Width="200"
+                                       Margin="0,20"
+        Height="35"
+        FontSize="14"
+        Background="#3e4147"
+        Foreground="#bdbdbd"
+        BorderThickness="0"
+        hc:BackgroundSwitchElement.MouseHoverBackground="#3E4047"
+        hc:BackgroundSwitchElement.MouseDownBackground="#3E4047"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

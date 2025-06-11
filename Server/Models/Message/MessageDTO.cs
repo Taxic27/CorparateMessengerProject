@@ -1,0 +1,16 @@
+﻿namespace Server.Models.Message
+{
+    public class MessageDTO
+    {
+        public Guid Id { get; set; }
+        public Guid ChatId { get; set; }
+        public string Text { get; set; }
+        public DateTime SentAt { get; set; }
+        public string Username {  get; set; }
+        public string SenderName { get; set; }
+        public string? FileUrl { get; set; }
+        public string? FileName { get; set; }
+        public string? FileType { get; set; }
+        public byte[]? FileSize { get; set; }
+    }
+}
