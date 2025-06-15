@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CorparateMessenger.Tools;
 using HandyControl.Controls;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Win32;
 using Server.Models.Chat;
 using Server.Models.User;
@@ -30,6 +31,8 @@ namespace CorparateMessenger.ViewModels
         [ObservableProperty]
         private bool _isEditMode;
 
+        private HubConnection _hubConnection;
+
         [ObservableProperty]
         private bool _isCreateMode;
 
@@ -40,10 +43,11 @@ namespace CorparateMessenger.ViewModels
         private readonly Guid _currentUserId;
         private readonly HttpClient _httpClient;
 
-        public GroupCreateViewModel(Guid currentUserId)
+        public GroupCreateViewModel(Guid currentUserId, HubConnection hubConnection)
         {
             _currentUserId = currentUserId;
             _httpClient = new HttpClient();
+            _hubConnection = hubConnection;
 
             IsEditMode = false;
             IsCreateMode = true;
@@ -52,11 +56,12 @@ namespace CorparateMessenger.ViewModels
             SetDefaultAvatar();
         }
 
-        public GroupCreateViewModel(ChatDTO selectedChat, Guid currentUserId)
+        public GroupCreateViewModel(ChatDTO selectedChat, Guid currentUserId, HubConnection hubConnection)
         {
             _selectedChat = selectedChat;
             _currentUserId = currentUserId;
             _httpClient = new HttpClient();
+            _hubConnection = hubConnection;
 
             IsEditMode = true;
             IsCreateMode = false;
@@ -183,7 +188,7 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Группа успешно создана");
-                                                WeakReferenceMessenger.Default.Send(new GroupUpdatedMessage());
+                        WeakReferenceMessenger.Default.Send(new GroupUpdatedMessage());
                     }
                 }
                 else
@@ -239,7 +244,7 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Изменения успешно сохранены");
-                        WeakReferenceMessenger.Default.Send(new GroupUpdatedMessage());
+                        await _hubConnection.InvokeAsync("NotifyGroupUpdated", _selectedChat.Id);
                     }
                 }
                 else
@@ -276,7 +281,7 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Группа успешно удалена");
-                        WeakReferenceMessenger.Default.Send(new GroupUpdatedMessage());
+                        await _hubConnection.InvokeAsync("NotifyGroupUpdated", _selectedChat.Id);
 
                     }
                 }

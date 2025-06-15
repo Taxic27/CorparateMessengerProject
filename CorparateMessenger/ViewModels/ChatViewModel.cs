@@ -95,6 +95,7 @@ namespace CorparateMessenger.ViewModels
         public ChatViewModel(UserDB currentUser)
         {
             InitializeHubConnection();
+            InitializeGroupUpdatesHandler();
             _currentUser = currentUser;
             MessagesVM = new MessagesViewModel(_hubConnection, _currentUser);
             AdminRole = currentUser.Role == "Администратор";
@@ -197,6 +198,7 @@ namespace CorparateMessenger.ViewModels
                             foreach (var chat in result.Data)
                                 Chats.Add(chat);
                         });
+                        await SubscribeToGroupChats();
                     }
                 }
             }
@@ -454,7 +456,7 @@ namespace CorparateMessenger.ViewModels
         [RelayCommand]
         private void CreateGroup()
         {
-            GroupVM = new GroupCreateViewModel(_currentUser.Id);
+            GroupVM = new GroupCreateViewModel(_currentUser.Id, _hubConnection);
 
             CurrentView = ViewType.GroupCreate;
             SelectedChat = null;
@@ -474,10 +476,43 @@ namespace CorparateMessenger.ViewModels
                 
 
 
-            GroupVM = new GroupCreateViewModel(SelectedChat, _currentUser.Id);
+            GroupVM = new GroupCreateViewModel(SelectedChat, _currentUser.Id, _hubConnection);
 
             CurrentView = ViewType.GroupCreate;
             SelectedChat = null;
+        }
+
+        private async Task SubscribeToGroupChats()
+        {
+            if (_hubConnection.State != HubConnectionState.Connected)
+                return;
+
+            try
+            {
+                foreach (var chat in Chats)
+                {
+                    await _hubConnection.InvokeAsync("JoinChat", chat.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                Growl.Warning($"Ошибка подписки на чаты: {ex.Message}");
+            }
+        }
+
+        private void InitializeGroupUpdatesHandler()
+        {
+            _hubConnection.On<Guid>("GroupUpdated", async (chatId) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    LoadAvailableChats();
+                    if (_selectedChatDTO?.Id == chatId)
+                    {
+                        CurrentView = ViewType.Welcome;
+                    }
+                });
+            });
         }
     }
 }

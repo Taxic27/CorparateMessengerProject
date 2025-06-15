@@ -80,6 +80,11 @@ public class ChatHub : Hub
         }
     }
 
+    public async Task NotifyGroupUpdated(Guid chatId)
+    {
+        await Clients.Group(chatId.ToString()).SendAsync("GroupUpdated", chatId);
+    }
+
     public async Task JoinChat(Guid chatId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());
