@@ -73,7 +73,8 @@ namespace CorparateMessenger.ViewModels
         [RelayCommand]
         private async Task CreateUser()
         {
-            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Surname) || string.IsNullOrWhiteSpace(CurrentPosition))
+            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Surname) || string.IsNullOrWhiteSpace(CurrentPosition) || string.IsNullOrWhiteSpace(Username)
+                || string.IsNullOrWhiteSpace(Password))
             {
                 Growl.Warning("Заполните обязательные поля");
                 return;
@@ -103,6 +104,7 @@ namespace CorparateMessenger.ViewModels
                     {
                         Growl.Success("Пользователь успешно создан");
                         ClearForm();
+                        WeakReferenceMessenger.Default.Send(new UserUpdatedMessage());
                     }
                 }
                 else
@@ -148,6 +150,7 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Изменения успешно сохранены");
+                        WeakReferenceMessenger.Default.Send(new UserUpdatedMessage());
                     }
                 }
                 else
@@ -197,6 +200,7 @@ namespace CorparateMessenger.ViewModels
             Surname = string.Empty;
             Patronymic = string.Empty;
             CurrentPosition = string.Empty;
+            Password = string.Empty;
             SetDefaultAvatar();
         }
 

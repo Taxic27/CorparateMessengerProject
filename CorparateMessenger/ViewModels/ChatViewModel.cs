@@ -6,11 +6,13 @@ using CorparateMessenger.Views;
 using HandyControl.Controls;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
+using Npgsql.Replication.PgOutput.Messages;
 using Server.Models.Chat;
 using Server.Models.User;
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
@@ -32,12 +34,22 @@ namespace CorparateMessenger.ViewModels
         private ChatDTO _selectedChat;
 
         private ChatDB _selectedChatDB;
+        private ChatDTO _selectedChatDTO;
 
         [ObservableProperty]
         private ChatDTO _selectedUser;
 
         public ObservableCollection<ChatDTO> Chats { get; } = new();
         public ObservableCollection<ChatDTO> Users { get; } = new();
+
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        [ObservableProperty]
+        private bool _adminRole = false;
+
+        private List<ChatDTO> _allChats = new();
+        private List<ChatDTO> _allUsers = new();
 
         private MessagesViewModel _messagesVM;
         public MessagesViewModel MessagesVM
@@ -85,6 +97,42 @@ namespace CorparateMessenger.ViewModels
             InitializeHubConnection();
             _currentUser = currentUser;
             MessagesVM = new MessagesViewModel(_hubConnection, _currentUser);
+            AdminRole = currentUser.Role == "Администратор";
+
+            WeakReferenceMessenger.Default.Register<UserUpdatedMessage>(this, (r, m) =>
+            {
+                LoadAvailableUsers();
+                SearchText = string.Empty;
+                CurrentView = ViewType.Welcome;
+            });
+
+            WeakReferenceMessenger.Default.Register<GroupUpdatedMessage>(this, (r, m) =>
+            {
+                LoadAvailableChats();
+                SearchText = string.Empty;
+                CurrentView = ViewType.Welcome;
+            });
+
+            WeakReferenceMessenger.Default.Register<UpdateLastMessage>(this, (r, m) =>
+            {
+                LoadAvailableChats();
+                LoadAvailableUsers();
+                SearchText = string.Empty;
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var chatToUpdate = Chats.FirstOrDefault(c => c.Id == m.ChatId);
+
+                    if (chatToUpdate != null)
+                    {
+                        SelectedChat = _selectedChatDTO;
+                    }
+                    else
+                    {
+                        SelectedUser = _selectedChatDTO;
+                    }
+                });
+            });
 
             LoadAvailableChats();
             LoadAvailableUsers();
@@ -141,6 +189,8 @@ namespace CorparateMessenger.ViewModels
 
                     if (result?.IsSuccess == true)
                     {
+                        _allChats = result.Data;
+
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             Chats.Clear();
@@ -185,6 +235,7 @@ namespace CorparateMessenger.ViewModels
 
                             if (chatResult.IsSuccess)
                             {
+                                _allUsers = chatResult.Data;
                                 Users.Clear();
                                 foreach (var userChats in chatResult.Data)
                                     Users.Add(userChats);
@@ -199,6 +250,41 @@ namespace CorparateMessenger.ViewModels
             }
         }
 
+        [RelayCommand]
+        private void SearchChats()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                Chats.Clear();
+                foreach (var chat in _allChats)
+                    Chats.Add(chat);
+
+                Users.Clear();
+                foreach (var user in _allUsers)
+                    Users.Add(user);
+            }
+            else
+            {
+                var searchLower = SearchText.ToLower();
+
+                var filteredChats = _allChats
+                    .Where(c => c.Name.ToLower().Contains(searchLower))
+                    .ToList();
+
+                Chats.Clear();
+                foreach (var chat in filteredChats)
+                    Chats.Add(chat);
+
+                var filteredUsers = _allUsers
+                    .Where(u => u.Name.ToLower().Contains(searchLower))
+                    .ToList();
+
+                Users.Clear();
+                foreach (var user in filteredUsers)
+                    Users.Add(user);
+            }
+        }
+
 
         [RelayCommand]
         private async Task SelectUser()
@@ -207,6 +293,7 @@ namespace CorparateMessenger.ViewModels
 
             _selectedChatDB = await CreateOrGetPrivateChat(SelectedUser, _currentUser.Id);
 
+            _selectedChatDTO = SelectedUser;
             SelectedChat = null;
 
             CurrentView = ViewType.Messages;
@@ -225,6 +312,7 @@ namespace CorparateMessenger.ViewModels
                 SelectedUser = null;
             }
 
+            _selectedChatDTO = SelectedChat;
             _selectedChatDB = ConvertToDB(SelectedChat);
 
             CurrentView = ViewType.Messages;
@@ -330,7 +418,7 @@ namespace CorparateMessenger.ViewModels
             }
         }
 
-        private ChatDB ConvertToDB(ChatDTO db)
+        private ChatDB? ConvertToDB(ChatDTO db)
         {
             return db != null ? new ChatDB
             {
@@ -344,11 +432,15 @@ namespace CorparateMessenger.ViewModels
         [RelayCommand]
         private async Task AddUser()
         {
-            if (_currentUser.Role == "Администратор")
+            if (_currentUser.Role != "Администратор")
+            {
+                Growl.Warning("Вы не являетесь администратором");
                 return;
+            }
 
             UserVM = new UserManagmentViewModel();
             CurrentView = ViewType.UserManagement;
+            SelectedChat = null;
         }
 
         [RelayCommand]
@@ -356,6 +448,7 @@ namespace CorparateMessenger.ViewModels
         {
             UserVM = new UserManagmentViewModel(_currentUser);
             CurrentView = ViewType.UserManagement;
+            SelectedChat = null;
         }
 
         [RelayCommand]
@@ -364,6 +457,7 @@ namespace CorparateMessenger.ViewModels
             GroupVM = new GroupCreateViewModel(_currentUser.Id);
 
             CurrentView = ViewType.GroupCreate;
+            SelectedChat = null;
         }
 
         [RelayCommand]
@@ -383,6 +477,7 @@ namespace CorparateMessenger.ViewModels
             GroupVM = new GroupCreateViewModel(SelectedChat, _currentUser.Id);
 
             CurrentView = ViewType.GroupCreate;
+            SelectedChat = null;
         }
     }
 }

@@ -45,11 +45,9 @@
             </Border.InputBindings>
         </Border>
 
-        <!-- Форма данных пользователя -->
         <StackPanel Grid.Column="2" 
                     Margin="20,0,20,0"
                     VerticalAlignment="Center">
-            <!-- Логин -->
             <TextBlock Text="Логин:" 
                        Margin="0,3"
                        FontWeight="SemiBold"
@@ -65,9 +63,9 @@
                      CaretBrush="Gray"
                      hc:InfoElement.Placeholder="Введите логин"
                      Style="{StaticResource TextBoxExtend}"
-                     Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                     Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}"
+                     MaxLength="50"/>
 
-            <!-- Пароль -->
             <TextBlock Text="Пароль:" 
                        Margin="0,3"
                        FontWeight="SemiBold"
@@ -83,7 +81,8 @@
                      CaretBrush="Gray"
                      hc:InfoElement.Placeholder="Введите пароль"
                          PasswordChanged="PasswordBox_PasswordChanged"
-                         Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                         Visibility="{Binding IsCreateMode, Converter={StaticResource BoolToVisibilityConverter}}"
+                         MaxLength="50">
             </PasswordBox>
 
             <!-- Имя -->
@@ -100,7 +99,8 @@
                      Foreground="#bdbdbd"
                      CaretBrush="Gray"
                      hc:InfoElement.Placeholder="Введите имя"
-                     Style="{StaticResource TextBoxExtend}"/>
+                     Style="{StaticResource TextBoxExtend}"
+                     MaxLength="50"/>
 
             <!-- Фамилия -->
             <TextBlock Text="Фамилия:" 
@@ -116,7 +116,8 @@
                      Foreground="#bdbdbd"
                      CaretBrush="Gray"
                      hc:InfoElement.Placeholder="Введите фамилию"
-                     Style="{StaticResource TextBoxExtend}"/>
+                     Style="{StaticResource TextBoxExtend}"
+                     MaxLength="50"/>
 
             <!-- Отчество -->
             <TextBlock Text="Отчество:" 
@@ -132,7 +133,8 @@
                      Foreground="#bdbdbd"
                      CaretBrush="Gray"
                      hc:InfoElement.Placeholder="Введите отчество"
-                     Style="{StaticResource TextBoxExtend}"/>
+                     Style="{StaticResource TextBoxExtend}"
+                     MaxLength="50"/>
 
             <!-- Должность -->
             <TextBlock Text="Должность:" 
@@ -149,9 +151,9 @@
                      CaretBrush="Gray"
                      Margin="0,0,0,10"
                      hc:InfoElement.Placeholder="Введите должность"
-                     Style="{StaticResource TextBoxExtend}"/>
+                     Style="{StaticResource TextBoxExtend}"
+                     MaxLength="100"/>
 
-            <!-- Кнопка сохранения -->
             <Button Content="Создать пользователя"
                     Command="{Binding CreateUserCommand}"
                     HorizontalAlignment="Center"

@@ -12,5 +12,6 @@ namespace Server.Services.Interface
         public Result<ChatDB> CreatePrivateChat(ChatDTO selectedUser, Guid CurrentUserId);
         public Result CreateGroupChat(string groupName, byte[] avatar, List<Guid> memberIds);
         public Result UpdateGroupChat(Guid chatId, string groupName, byte[] avatar, List<Guid> memberIds);
+        public Result DeleteChatGroup(Guid chatId);
     }
 }

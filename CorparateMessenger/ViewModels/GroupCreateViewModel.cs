@@ -183,6 +183,7 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Группа успешно создана");
+                                                WeakReferenceMessenger.Default.Send(new GroupUpdatedMessage());
                     }
                 }
                 else
@@ -238,6 +239,7 @@ namespace CorparateMessenger.ViewModels
                     if (result?.IsSuccess == true)
                     {
                         Growl.Success("Изменения успешно сохранены");
+                        WeakReferenceMessenger.Default.Send(new GroupUpdatedMessage());
                     }
                 }
                 else
@@ -249,6 +251,44 @@ namespace CorparateMessenger.ViewModels
             catch (Exception ex)
             {
                 Growl.Error($"Ошибка: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private async Task DeleteGroup()
+        {
+            if (HandyControl.Controls.MessageBox.Show($"Вы уверены, что хотите удалить группу '{_selectedChat.Name}'?",
+                               "Подтверждение удаления",
+                               MessageBoxButton.YesNo,
+                               MessageBoxImage.Warning) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                var response = await _httpClient.DeleteAsync(
+                    $"https://localhost:7274/api/chats/deletechat-group?chatId={_selectedChat.Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResult<bool>>();
+                    if (result?.IsSuccess == true)
+                    {
+                        Growl.Success("Группа успешно удалена");
+                        WeakReferenceMessenger.Default.Send(new GroupUpdatedMessage());
+
+                    }
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Growl.Error($"Ошибка удаления группы: {error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Growl.Error($"{ex.Message}");
             }
         }
 

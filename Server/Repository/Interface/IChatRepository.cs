@@ -12,6 +12,7 @@ namespace Server.Repository.Interface
         public ChatDB FindPrivateChat(Guid selectedUserId, Guid currentUserId);
         public void AddChat(ChatDB chat);
         public void UpdateGroupChat(ChatDB chat);
+        public void DeleteChatGroup(Guid chatId);
         public void AddUserToChat(Guid chatId, Guid userId);
         public void AddUsersToChat(Guid chatId, IEnumerable<Guid> userIds);
     }

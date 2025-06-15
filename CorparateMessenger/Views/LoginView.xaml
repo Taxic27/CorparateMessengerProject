@@ -77,7 +77,8 @@
                  CaretBrush="Gray"
                  hc:InfoElement.Placeholder="Введите логин"
                  Style="{StaticResource TextBoxExtend}"
-                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                         MaxLength="50"/>
             </Border>
 
             <Border CornerRadius="8" 
@@ -95,7 +96,8 @@
                  CaretBrush="Gray"
              hc:InfoElement.Placeholder="Введите пароль"
              hc:InfoElement.Necessary="True"
-             Style="{StaticResource PasswordBoxExtend}">
+             Style="{StaticResource PasswordBoxExtend}"
+                             MaxLength="50">
                 </PasswordBox>
             </Border>
 

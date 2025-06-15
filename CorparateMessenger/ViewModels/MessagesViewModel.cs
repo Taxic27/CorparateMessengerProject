@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using CorparateMessenger.Tools;
 using HandyControl.Controls;
 using HandyControl.Data;
@@ -30,7 +31,7 @@ namespace CorparateMessenger.ViewModels
 
         public ObservableCollection<MessageModel> Messages { get; } = new();
 
-        private int _loadedMessagesCount = 10;
+        private int _loadedMessagesCount = 100;
         private const int MessagesBatchSize = 20;
 
         private HubConnection _hubConnection;
@@ -68,6 +69,8 @@ namespace CorparateMessenger.ViewModels
                     var lastMessage = Messages.LastOrDefault();
                     newMessage.IsSenderInfoVisible = lastMessage == null || lastMessage.SenderName != newMessage.SenderName;
 
+                    WeakReferenceMessenger.Default.Send(new UpdateLastMessage(CurrentChat.Id));
+
                     Messages.Add(newMessage);
                 });
             });
@@ -99,7 +102,7 @@ namespace CorparateMessenger.ViewModels
                         "RequestMessageHistory",
                         CurrentChat.Id,
                         0,
-                        10
+                        100
                     );
 
                     var processedMessages = initialMessages.Select(m => new MessageModel
@@ -120,6 +123,7 @@ namespace CorparateMessenger.ViewModels
                     {
                         Application.Current.Dispatcher.Invoke(() =>
                         {
+
                             var reversedMessages = processedMessages.AsEnumerable().Reverse().ToList();
 
                             ProcessMessagesHeaders(reversedMessages, Messages.FirstOrDefault());
@@ -156,7 +160,10 @@ namespace CorparateMessenger.ViewModels
 
                 if (additionalMessages?.Count > 0)
                 {
+                    var lastMessageBeforeInsert = Messages.FirstOrDefault();
                     var reversedMessages = additionalMessages.AsEnumerable().ToList();
+
+                    ProcessMessagesHeaders(reversedMessages, lastMessageBeforeInsert);
 
                     foreach (var message in reversedMessages)
                     {
@@ -270,26 +277,25 @@ namespace CorparateMessenger.ViewModels
             string extension = Path.GetExtension(filename).ToLower();
             return extension switch
             {
-                ".jpg" or ".png" or ".jpeg" or ".gif" => "image",
-                ".mp4" or ".mov" or ".avi" => "video",
-                ".mp3" or ".wav" => "audio",
-                _ => "document"
+                ".jpg" or ".png" or ".jpeg" or ".gif" => "Фото",
+                ".mp4" or ".mov" or ".avi" => "Видео",
+                _ => "Документ"
             };
         }
 
-        [RelayCommand]
-        private void ScrollChanged(ScrollChangedEventArgs e)
-        {
-            if (e.VerticalChange < 0 && e.VerticalOffset <= 10 && !IsLoadingMessages)
-            {
-                LoadMoreMessagesCommand.Execute(null);
-            }
-        }
+        //[RelayCommand]
+        //private void ScrollChanged(ScrollChangedEventArgs e)
+        //{
+        //    if (e.VerticalChange < 0 && e.VerticalOffset <= 100 && !IsLoadingMessages)
+        //    {
+        //        LoadMoreMessagesCommand.Execute(null);
+        //    }
+        //}
 
         [RelayCommand]
         private void OpenImage(MessageModel message)
         {
-            if (message?.FileUrl == null || message.FileType != "image")
+            if (message?.FileUrl == null || message.FileType != "Фото")
                 return;
 
             try

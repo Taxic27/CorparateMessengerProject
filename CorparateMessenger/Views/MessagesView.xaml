@@ -15,20 +15,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Canvas Panel.ZIndex="100">
-            <ScrollViewer VerticalScrollBarVisibility="Hidden" 
-                          HorizontalAlignment="Right"
-                          VerticalAlignment="Top"
-                          Width="Auto"
-                          Height="Auto"
-                          Canvas.Top="10"
-                          Canvas.Right="10">
-                <StackPanel hc:Growl.GrowlParent="True" 
-                            VerticalAlignment="Top" 
-                            Margin="0,10,10,10"/>
-            </ScrollViewer>
-        </Canvas>
-
         <Border Background="#3e4147">
             <Grid HorizontalAlignment="Stretch" Margin="8">
                 <Grid.ColumnDefinitions>
@@ -62,18 +48,33 @@
         </Border>
 
         <ListBox Name="ListBoxChat" 
-                 Grid.Row="1"
+         Grid.Row="1"
          ItemsSource="{Binding Messages}"
          ItemContainerStyle="{StaticResource ChatBubbleMessageStyle}"
          Background="Transparent"
          BorderThickness="0"
-        ScrollViewer.VerticalScrollBarVisibility="Auto"
-        ScrollViewer.CanContentScroll="True"
-        VirtualizingPanel.ScrollUnit="Pixel">
+         ScrollViewer.VerticalScrollBarVisibility="Auto"
+         ScrollViewer.CanContentScroll="False"
+            ScrollViewer.IsDeferredScrollingEnabled="True"
+            VirtualizingPanel.ScrollUnit="Pixel">
+            <ListBox.Template>
+                <ControlTemplate TargetType="ListBox">
+                    <ScrollViewer x:Name="ScrollViewer"
+                          CanContentScroll="True"
+                          VerticalScrollBarVisibility="Auto">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="ScrollChanged">
+                                <i:InvokeCommandAction Command="{Binding ScrollChangedCommand}"
+                                             PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ItemsPresenter/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ListBox.Template>
             <i:Interaction.Behaviors>
                 <tools:SimpleScrollBehavior/>
             </i:Interaction.Behaviors>
-
         </ListBox>
 
         <!--<ListView ItemsSource="{Binding Messages}" 
@@ -119,7 +120,6 @@
             </ListView.ItemTemplate>-->
 
 
-        <!-- Поле ввода -->
         <Grid Grid.Row="2" Margin="5">
             <Border CornerRadius="8" 
             Background="#3e4147"
@@ -143,7 +143,8 @@
                      BorderThickness="0"
                      TextWrapping="Wrap"
                         Style="{StaticResource TextBoxExtend}"
-                        VerticalScrollBarVisibility="Auto">
+                        VerticalScrollBarVisibility="Auto"
+                             MaxLength="1000">
                         <i:Interaction.Triggers>
                             <i:KeyTrigger Key="Enter">
                                 <i:InvokeCommandAction Command="{Binding SendMessageCommand}"/>

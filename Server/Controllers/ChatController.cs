@@ -63,6 +63,12 @@ namespace Server.Controllers
            return _chatService.CreateGroupChat(request.GroupName, request.Avatar, request.MemberIds);
         }
 
+        [HttpDelete("deletechat-group")]
+        public Result DeleteChatGroup(Guid ChatId)
+        {
+            return _chatService.DeleteChatGroup(ChatId);
+        }
+
         [HttpGet("private-exists")]
         public Result<ChatDB> CheckPrivateChatExists(Guid selectedUserId, Guid currentUserId)
         {

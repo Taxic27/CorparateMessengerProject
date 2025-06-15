@@ -74,7 +74,7 @@
                                         <Button Command="{Binding DataContext.OpenImageCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                             CommandParameter="{Binding}"
                                             Style="{StaticResource FileButtonStyle}"
-                                            Visibility="{Binding FileType, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=image}">
+                                            Visibility="{Binding FileType, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Фото}">
                                             <Image Source="{Binding FileUrl}"
                                                MaxWidth="600"
                                                Height="300"
@@ -84,7 +84,7 @@
                                         <Button Style="{StaticResource FileButtonStyle}"
                                             Command="{Binding DataContext.DownloadFileCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                             CommandParameter="{Binding}"
-                                            Visibility="{Binding FileType, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=video}">
+                                            Visibility="{Binding FileType, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Видео}">
                                             <StackPanel Orientation="Horizontal" Margin="8">
                                                 <Image Source="/Icons/VideoIcon.png"
                                                    Margin="0,0,8,0"/>
@@ -97,7 +97,7 @@
                                         <Button Style="{StaticResource FileButtonStyle}"
                                             Command="{Binding DataContext.DownloadFileCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                             CommandParameter="{Binding}"
-                                            Visibility="{Binding FileType, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=document}">
+                                            Visibility="{Binding FileType, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Документ}">
                                             <StackPanel Orientation="Horizontal" Margin="8">
                                                 <Image Source="/Icons/DocumentIcon.png"
                                                    Margin="0,0,8,0"/>

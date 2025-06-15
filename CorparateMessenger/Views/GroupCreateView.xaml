@@ -20,12 +20,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Panel.ZIndex="100">
-            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right">
-                <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
-            </ScrollViewer>
-        </Grid>
-
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -67,7 +61,8 @@
                      Foreground="#bdbdbd"
                      CaretBrush="Gray"
                      hc:InfoElement.Placeholder="Введите название группы"
-                     Style="{StaticResource TextBoxExtend}"/>
+                     Style="{StaticResource TextBoxExtend}"
+                     MaxLength="50"/>
         </Grid>
 
         <ListView Grid.Row="1" 
@@ -146,6 +141,20 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Command="{Binding EditGroupCommand}" 
 Content="Редактировать"
+        Grid.Row="2"
+HorizontalAlignment="Right"
+Width="200"
+Height="35"
+FontSize="14"
+Background="#3e4147"
+Foreground="#bdbdbd"
+BorderThickness="0"
+        Margin="0,25,25,25"
+hc:BackgroundSwitchElement.MouseHoverBackground="#3E4047"
+hc:BackgroundSwitchElement.MouseDownBackground="#3E4047"
+                    Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <Button Command="{Binding DeleteGroupCommand}" 
+Content="Удалить группу"
         Grid.Row="2"
 HorizontalAlignment="Right"
 Width="200"

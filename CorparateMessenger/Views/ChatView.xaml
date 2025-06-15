@@ -9,6 +9,8 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:views="clr-namespace:CorparateMessenger.Views"
         mc:Ignorable="d"
+        MinHeight="550"
+        MinWidth="800"
         Height="650" Width="1200"
         Background="#36393F"
         WindowStyle="None"
@@ -24,16 +26,6 @@
     M137.4 227.9c-6.5 4-9.3 10.3-7.9 17.8.9 4.8 6.8 10.7 12 12.2 5.5 1.5 116.4 1.5 122 0 13.3-3.7 16.3-21.6 4.8-29.4l-3.8-2.5h-62c-59 0-62.2.1-65.1 1.9z
     M454 167.2c-7.7 5.3-9.9 13.2-6.1 21.2 2.7 5.6 7.2 8.5 14.3 9.3 6.8.7 10 2.4 13.5 7l2.8 3.6.3 72.6.2 72.6-2.2 4.5c-1.7 3.3-3.5 5.1-6.8 6.7-4.3 2.2-5.2 2.3-37.9 2.3-31.4 0-33.7.1-37.5 2-2.3 1.1-5.2 3.6-6.6 5.7-2.3 3.3-2.5 4.8-2.9 16.5-.2 10.3-.6 12.8-1.6 12.4-.8-.3-14.1-8.5-29.7-18.3l-28.3-17.8-45-.2-45-.3-4 2.3c-11.3 6.4-11.1 22.6.5 28.5 4.4 2.2 5 2.2 43.7 2.2h39.2l39 24.4c21.4 13.4 40.6 24.9 42.5 25.6 6.7 2.2 16.3-2.6 19.2-9.7.8-1.8 1.4-6.1 1.4-9.6s.3-11.9.7-18.5l.6-12.2h24.6c27.5 0 33.3-.9 43.3-6.2 6.9-3.7 16.7-13.7 20.3-20.8 5.4-10.7 5.5-11.5 5.5-90.1 0-44.2-.4-74.7-1-78-2.4-13-12.5-27.1-24.1-33.7-11.2-6.3-26.6-8.2-32.9-4z
         </Geometry>
-        <!--<ContextMenu x:Key="ChatContextMenu" Background="#36393F" BorderBrush="#1C1C1C" hc:MenuAttach.AnimationMode="Fade">
-            <MenuItem Header="Переименовать" Foreground="White" Background="Transparent" 
-                      Style="{StaticResource MenuItemCustom}"/>
-            <MenuItem Header="Покинуть группу" Foreground="White" Background="Transparent" 
-                  hc:BackgroundSwitchElement.MouseHoverBackground="#6F717273"
-                      Style="{StaticResource MenuItemCustom}"/>
-            <MenuItem Header="Добавить участника" Foreground="White" Background="Transparent" 
-                  hc:BackgroundSwitchElement.MouseHoverBackground="#6F717273"
-                      Style="{StaticResource MenuItemCustom}"/>
-        </ContextMenu>-->
     </Window.Resources>
 
     <Grid>
@@ -46,12 +38,6 @@
             <ColumnDefinition Width="300"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
-        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Panel.ZIndex="10">
-            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right">
-                <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
-            </ScrollViewer>
-        </Grid>
 
         <Border Grid.ColumnSpan="2"
                 Background="#1C1C1C"
@@ -110,7 +96,14 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <hc:SearchBar Background="#3e4147" Foreground="#bdbdbd" hc:InfoElement.ShowClearButton="True" hc:InfoElement.Placeholder="Введите чат" Grid.Row="0" Margin="0,10" hc:InfoElement.Necessary="True" Style="{StaticResource SearchBarPlus}"/>
+            <hc:SearchBar Background="#3e4147" Foreground="#bdbdbd" hc:InfoElement.ShowClearButton="True" hc:InfoElement.Placeholder="Введите чат" Grid.Row="0" Margin="0,10" hc:InfoElement.Necessary="True" Style="{StaticResource SearchBarPlus}"
+                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchChatsCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </hc:SearchBar>
 
             <Border Grid.Row="1" Background="#1C1C1C">
                 <Grid>
@@ -163,12 +156,13 @@
             </Border>
             
             <ListView ItemsSource="{Binding Chats}"
-                      SelectedValue="{Binding SelectedChat, Mode=TwoWay}"
+                      SelectedValue="{Binding SelectedChat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Grid.Row="2"
                       BorderBrush="Transparent"
                       HorizontalContentAlignment="Stretch"
                       Background="Transparent"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                       VirtualizingPanel.ScrollUnit="Pixel"
                       ItemContainerStyle="{StaticResource ChatItem}"
                       MaxHeight="211">
                 <i:Interaction.Triggers>
@@ -189,6 +183,7 @@
                       HorizontalContentAlignment="Stretch"
                       Background="Transparent"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                       VirtualizingPanel.ScrollUnit="Pixel"
                       ItemContainerStyle="{StaticResource ChatItem}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
@@ -204,12 +199,11 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Аватар пользователя -->
                 <Border Grid.Column="0" 
             Width="60" Height="60" 
             CornerRadius="30" 
             Background="#3E4047" 
-            Margin="10,0,10,10">
+            Margin="10,10,10,10">
                     <Image Source="{Binding CurrentUser.Avatar, Converter={StaticResource ByteArrayToImageSourceConverter}}"
                Stretch="UniformToFill"
                Width="60"
@@ -219,8 +213,6 @@
                         </Image.Clip>
                     </Image>
                 </Border>
-
-                <!-- Информация о пользователе -->
                 <StackPanel Grid.Column="1"
                 VerticalAlignment="Center" 
                 Margin="0,0,0,10">
@@ -238,6 +230,7 @@
                     <TextBlock Foreground="#bdbdbd"
                    FontWeight="Medium"
                                HorizontalAlignment="Left"
+                               TextWrapping="Wrap"
                    Style="{StaticResource TextBlockDefaultSecLight}"
                    Text="{Binding CurrentUser.CurrentPosition}"/>
                 </StackPanel>
@@ -252,7 +245,8 @@
                             Margin="5,0,0,0"
                             Background="Transparent"
                             BorderBrush="Transparent"
-                            Padding="2">
+                            Padding="2"
+                             Visibility="{Binding AdminRole, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Image Source="/Icons/UserAddIcon.png" Stretch="UniformToFill">
                             <Image.Style>
                                 <Style TargetType="Image">
@@ -307,7 +301,6 @@
                               Width="300"
                               Height="300"/>
 
-                <!-- Сообщение о выборе чата -->
                 <TextBlock Text="Выберите чат для начала общения"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
@@ -344,10 +337,15 @@
                     </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>
+
+            <Grid Grid.RowSpan="3" Panel.ZIndex="100">
+                <StackPanel hc:Growl.GrowlParent="True" 
+             VerticalAlignment="Top" 
+             HorizontalAlignment="Right"
+             Margin="0,10,10,10"/>
+            </Grid>
         </Grid>
 
-
-        <!-- Поле ввода -->
         <!--
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>

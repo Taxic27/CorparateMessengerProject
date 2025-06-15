@@ -107,6 +107,20 @@ namespace Server.Services
             }
         }
 
+        public Result DeleteChatGroup(Guid chatId)
+        {
+            try
+            {
+                _chatRepository.DeleteChatGroup(chatId);
+
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail("Ошибка при создании чата");
+            }
+        }
+
         public Result UpdateGroupChat(Guid chatId ,string groupName, byte[] avatar, List<Guid> memberIds)
         {
             try

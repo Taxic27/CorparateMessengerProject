@@ -159,6 +159,24 @@ WHERE u.id = ANY(@OtherUserIds)";
             _mainConnector.Execute(request, parameters);
         }
 
+        public void DeleteChatGroup(Guid chatId)
+        {
+            string request = @"
+        DELETE FROM messages 
+        WHERE chat_id = @ChatId;
+        
+        DELETE FROM chat_users 
+        WHERE chat_id = @ChatId;
+        
+        DELETE FROM chats 
+        WHERE id = @ChatId;";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@ChatId", chatId);
+
+            _mainConnector.Execute(request, parameters);
+        }
+
         public void AddUserToChat(Guid chatId, Guid userId)
         {
             string request = @"

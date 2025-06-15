@@ -32,7 +32,7 @@ builder.Services.Configure<JsonSerializerOptions>(options =>
 
 builder.Services.AddSignalR(options =>
 {
-    options.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10 МБ (можно увеличить)
+    options.MaximumReceiveMessageSize = 10L * 1024 * 1024 * 1024; 
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
